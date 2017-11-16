@@ -19,43 +19,64 @@ import org.springframework.security.core.userdetails.UserDetailsService;
  */
 @Configuration
 @EnableWebSecurity
+/**
+ * EnableGlobalMethodSecurity 来启用基于注解的安全性
+ */
 @EnableGlobalMethodSecurity(prePostEnabled  = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     @Bean
     public UserDetailsService userDetailsService() { //覆盖写userDetailsService方法 (1)
-        System.out.println("初始化");
         return new UserSecurityService();
 
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/templates/**");
+        web.ignoring().antMatchers("/frame/**","/js/**","/login.html");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-            .antMatchers("/", "/home").permitAll()
+            .antMatchers("/","/login/ajax").permitAll()
             .anyRequest().authenticated()
             .and()
-            .formLogin()
-            .loginPage("/login")
-            .permitAll()
+            // 指定登录页面的请求路径
+            .formLogin().loginPage("/login_page")
+            // 登陆处理路径
+            .loginProcessingUrl("/login").permitAll()
             .and()
             .logout()
-            .permitAll();
+            .permitAll().and().csrf().disable();
+
     }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        //auth.inMemoryAuthentication()
-        //    .withUser("user").password("password").roles("USER");
-
         auth.userDetailsService(userDetailsService());
     }
+
+    //@Bean
+    //public MyUsernamePasswordAuthenticationFilter myUsernamePasswordAuthenticationFilter() throws Exception {
+    //    MyUsernamePasswordAuthenticationFilter myFilter = new MyUsernamePasswordAuthenticationFilter();
+    //    myFilter.setAuthenticationManager(authenticationManagerBean());
+    //    myFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler());
+    //    myFilter.setAuthenticationFailureHandler(authenticationFailureHandler());
+    //    myFilter.setRememberMeServices(tokenBasedRememberMeServices());
+    //    return myFilter;
+    //}
+    //
+    //@Bean
+    //public AuthenticationSuccessHandler authenticationSuccessHandler() {
+    //    return new SimpleUrlAuthenticationSuccessHandler("/login/success");
+    //}
+    //
+    //@Bean
+    //public AuthenticationFailureHandler authenticationFailureHandler() {
+    //    return new SimpleUrlAuthenticationFailureHandler("/login/failure");
+    //}
 }
  

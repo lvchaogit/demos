@@ -35,10 +35,10 @@ public class UserSecurityService implements UserDetailsService {
         //密码 根据相应场景进行获取
         String pwd = "testpwd";
         //角色 可根据相应场景进行获取
-        String ruleCode = "Admin";
+        String ruleCode = "ROLE_Admin";
 
         if(!"admin".equals(loginName)){
-            ruleCode = "User";
+            ruleCode = "ROLE_User";
         }
 
         List<GrantedAuthority> authorityArrayList = new ArrayList<GrantedAuthority>();

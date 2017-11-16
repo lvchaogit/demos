@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.User;
  */
 public class UserUtil {
 
-    /*
+    /**
      * 获取当前用户
      *
      * @return
