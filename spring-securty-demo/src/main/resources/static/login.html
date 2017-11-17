@@ -50,7 +50,6 @@
                     }
                 },
                 submitHandler : function(form) {
-                    debugger
                     $.ajax({
                         url : "/login",
                         type : "POST",
@@ -58,11 +57,9 @@
                         async : false,
                         dataType : "json",
                         success: function (data) {
-                            debugger
                             alert(data);
                         },
                         fail: function (status) {
-                            debugger
                             alert("登录失败！");
                         }
                     });
