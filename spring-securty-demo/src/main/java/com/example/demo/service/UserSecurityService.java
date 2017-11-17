@@ -35,6 +35,8 @@ public class UserSecurityService implements UserDetailsService {
         //密码 根据相应场景进行获取
         String pwd = "testpwd";
         //角色 可根据相应场景进行获取
+        //注：此处角色code需加上ROLE_前缀，因为security比对的时候会默认带这个前缀
+        //代码：SecurityExpressionRoot.hasAnyAuthorityName()
         String ruleCode = "ROLE_Admin";
 
         if(!"admin".equals(loginName)){
