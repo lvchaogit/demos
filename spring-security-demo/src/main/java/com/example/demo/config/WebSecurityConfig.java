@@ -32,16 +32,28 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
+    /**
+     * 不进行安全验证的地址配置，类似于静态文件，资源文件等；
+     * @param web
+     * @throws Exception
+     */
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/frame/**","/js/**","/login.html");
     }
 
+    /**
+     * 用于配置验证路径，对哪些进行验证，登录默认路径等
+     * @param http
+     * @throws Exception
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
+            //跳过
             .antMatchers("/","/login/ajax").permitAll()
+            //所有请求都需要验证
             .anyRequest().authenticated()
             .and()
             // 指定登录页面的请求路径
@@ -49,11 +61,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             // 登陆处理路径
             .loginProcessingUrl("/login").permitAll()
             .and()
-            .logout()
-            .permitAll().and().csrf().disable();
+            .logout().permitAll().and()
+            //关闭csrf
+            .csrf().disable();
 
     }
 
+    /**
+     * configureGlobal方法的名字不重要，然而，重要的是只在一个被@EnableWebSecurity,
+     * @EnableGlobalMethodSecurity，或者@EnableGlobalAuthentication注解的类中配置
+     * AuthenticationManagerBuilder，否则会有不可预知的后果。(摘自Spring Security 参考手册)
+     *
+     * 该方法用于验证如何进行身份验证，此处采用的是自定义身份验证，即自己定义验证的方法，
+     * 详细的请参见：《Spring Security 参考手册》中《验证》栏目的描述
+     * @param auth
+     * @throws Exception
+     */
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService());
