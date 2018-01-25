@@ -6,7 +6,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 /**
- * CompletableFutrue 使用demo
+ * CompletableFutrue 使用demo 加深理解
  * @author LC
  * @date 2017/12/21
  */
@@ -75,11 +75,10 @@ public class CompletableFutrueDemo {
 
     /**
      * 返回所有商品信息
-     * @param str
      * @return
      * @throws Exception
      */
-    CompletableFuture<List<String>> getAll(String str)throws Exception{
+    CompletableFuture<List<String>> getAll()throws Exception{
         List<String> list = new ArrayList<>();
        return  getList().thenApply((List<String> idList) ->{
             idList.stream().forEach(id->{
@@ -92,13 +91,15 @@ public class CompletableFutrueDemo {
                 //获取商品代码
                 CompletableFuture<String> test3 = getCode();
 
+                String ss = "ssssss";
+                ss.substring(1,2).substring(1,3).substring(3,5);
+
                 CompletableFuture<Void> test123 = CompletableFuture.allOf(test1,test3,CompletableFuture.anyOf(test2,test21));
                 test123.thenApplyAsync(s -> {
                         try {
                             String str1=  "名称：" + test1.get() + "，价格：" + (test2 == null ? test21 : test2).get() +
                                 "，code:" +
                                 test3.get();
-                            System.out.println("ssss:"+str1);
                             list.add(str1);
                             return str1;
                         } catch (InterruptedException e) {
@@ -110,7 +111,7 @@ public class CompletableFutrueDemo {
                      }
                 );
                 test123.join();
-                System.out.println("执行完毕");
+                System.out.println("商品信息获取执行完毕");
                 //return new Date();
             });
             return list;
@@ -120,9 +121,9 @@ public class CompletableFutrueDemo {
     public static void main(String[] args) {
         CompletableFutrueDemo demo = new CompletableFutrueDemo();
         try {
-            CompletableFuture<List<String>>  list = demo.getAll("test");
+            CompletableFuture<List<String>>  list = demo.getAll();
             for (String str:list.get()){
-                System.out.println("str:"+str);
+                System.out.println("商品明细:"+str);
             }
         } catch (Exception e) {
             e.printStackTrace();
