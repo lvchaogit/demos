@@ -1,0 +1,14 @@
+server:
+  port: 8090
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8088/eureka/ # 服务注册中心地址
+spring:
+  application:
+    name: customer-service # 服务名称
+
+#- server.port 设置工程服务端口
+#- eureka.client.service-url.defaultZone 设置服务注册中心地址
+
